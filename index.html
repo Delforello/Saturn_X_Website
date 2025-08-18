@@ -366,10 +366,29 @@
 
   <section class="hero" id="download">
     <h1>Saturn X</h1>
-    <p>Best executor for Roblox, easy to use and fast.</p>
-    <a href="Bootstrapper.exe" class="download-btn" download="SaturnX_Executor">Download now</a>
-    <p>Current Version: 2.5.0</p>
+    <p>Good executor for Roblox, easy to use and fast.</p>
+    <a href="Bootstrapper.exe" class="download-btn" download="SaturnX_Executor" id="downloadBtn">Download now</a>
+    <p>Current Version: 2.5.1</p>
   </section>
+
+  <script>
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    downloadBtn.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/increment', { method: 'POST' });
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log(`count updated: ${data.count}`);
+        } else {
+          console.error('Error:', data.error);
+        }
+      } catch (err) {
+        console.error('Error network:', err);
+      }
+    });
+  </script>
 
   <section class="features">
     <div class="feature-card animate-on-scroll">
