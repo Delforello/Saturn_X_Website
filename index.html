@@ -28,7 +28,7 @@
     }
     nav {
       background: var(--darker-bg);
-      padding: 1rem 5%;
+      padding: 1rem 2%;
       position: fixed;
       width: 100%;
       top: 0;
@@ -40,9 +40,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
+      max-width: 100%;
+      margin: 0;
+      padding: 0 10px;
     }
+
+
     .logo {
       color: var(--text-light);
       font-size: 1.5rem;
@@ -349,6 +352,68 @@
       opacity: 1;
       transform: translateY(0);
     }
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      inset: 0;
+      background-color: rgba(0,0,0,0.7);
+    }
+    .popup-content {
+      background-color: #191A1C;
+      margin: 8% auto;
+      padding: 36px 28px;
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 92%;
+      max-width: 640px;
+      border-radius: 16px;
+      color: #f0f0f0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+    }
+    .popup-img {
+      width: min(220px, 60vw);
+      height: auto;
+      display: block;
+      border-radius: 20px;
+    }
+    .popup-text {
+      font-size: 22px;
+      font-weight: 800; 
+      line-height: 1.35;
+      margin: 0;
+    }
+    .popup-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: normal;
+      color: #4da3ff;
+      text-decoration: none;
+      padding: 12px 22px;
+      background: rgba(77,163,255,0.12);
+      border-radius: 10px;
+      transition: background 0.25s ease;
+    }
+    .popup-link:hover { background: rgba(77,163,255,0.28); }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      border: 0;
+      background: transparent;
+      color: #aaa;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .close-btn:hover { color: #fff; }
   </style>
 </head>
 <body>
@@ -371,24 +436,19 @@
     <p>Current Version: 2.5.1</p>
   </section>
 
-  <script>
-    const downloadBtn = document.getElementById('downloadBtn');
-
-    downloadBtn.addEventListener('click', async () => {
-      try {
-        const response = await fetch('/api/increment', { method: 'POST' });
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log(`count updated: ${data.count}`);
-        } else {
-          console.error('Error:', data.error);
-        }
-      } catch (err) {
-        console.error('Error network:', err);
-      }
-    });
-  </script>
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <button class="close-btn" aria-label="Chiudi popup">×</button>
+      <img src="https://dotnet.microsoft.com/blob-assets/images/dotnet-icons/square.png" alt=".NET Logo" class="popup-img">
+      <p class="popup-text">
+        If the bootstrapper does not open, you need to install <br>
+        <strong>.NET framework 8.0</strong>:
+      </p>
+      <a href="https://dotnet.microsoft.com/it-it/download/dotnet/thank-you/sdk-8.0.413-windows-x64-installer" target="_blank" class="popup-link">
+        Download .NET 8.0
+      </a>
+    </div>
+  </div>
 
   <section class="features">
     <div class="feature-card animate-on-scroll">
@@ -421,7 +481,6 @@
     </a>
   </section>
 
-  <!-- Sezione Contatti -->
   <section id="contacts" class="contacts">
     <h2 class="section-title">Contatti</h2>
     <div class="contact-cards">
@@ -443,6 +502,38 @@
   </footer>
 
   <script>
+    const downloadBtn = document.getElementById('downloadBtn');
+    const popup = document.getElementById('popup');
+    const closeBtn = document.querySelector('.close-btn');
+
+    downloadBtn.addEventListener('click', async () => {
+      // Mostra popup senza bloccare il download
+      popup.style.display = 'block';
+
+      try {
+        const response = await fetch('/api/increment', { method: 'POST' });
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log(`count updated: ${data.count}`);
+        } else {
+          console.error('Error:', data.error);
+        }
+      } catch (err) {
+        console.error('Error network:', err);
+      }
+    });
+
+    closeBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === popup) {
+        popup.style.display = 'none';
+      }
+    });
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if(entry.isIntersecting) {
@@ -455,15 +546,6 @@
 
     document.querySelectorAll('.animate-on-scroll').forEach((element) => {
       observer.observe(element);
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
-        });
-      });
     });
   </script>
 </body>
