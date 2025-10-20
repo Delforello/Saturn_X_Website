@@ -89,7 +89,7 @@
       text-decoration: none;
       font-weight: bold;
       display: inline-block;
-      margin-top: 1rem; /* Modificato per dare spazio al codice */
+      margin-top: 1rem;
       transition: transform 0.3s, box-shadow 0.3s;
     }
     .download-btn:hover {
@@ -486,32 +486,29 @@
 
   <script>
     window.onload = function() {
-        function generateCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = '';
-            for (let i = 0; i < 6; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
+      function generateCode() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
         }
-        const uniqueCode = generateCode();
-        document.getElementById('download-code').textContent = uniqueCode;
+        return code;
+      }
 
-        sessionStorage.setItem('downloadVerificationCode', uniqueCode);
+      const uniqueCode = generateCode();
+      document.getElementById('download-code').textContent = uniqueCode;
+      localStorage.setItem('downloadVerificationCode', uniqueCode.toUpperCase().trim());
     };
-
-
-    // --- TUO SCRIPT ESISTENTE PER IL POPUP ---
     const downloadBtn = document.getElementById('downloadBtn');
     const popup = document.getElementById('popup');
     const closeBtn = document.querySelector('.close-btn');
 
     downloadBtn.addEventListener('click', (event) => {
-      event.preventDefault(); 
+      event.preventDefault();
       popup.style.display = 'block';
-
+      const href = event.currentTarget.href;
       setTimeout(() => {
-        window.location.href = event.target.href;
+        window.location.href = href;
       }, 2000);
     });
 
@@ -524,12 +521,10 @@
         popup.style.display = 'none';
       }
     });
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if(entry.isIntersecting) {
           entry.target.classList.add('visible');
-        } else {
         }
       });
     }, { threshold: 0.1 });
@@ -538,6 +533,7 @@
       observer.observe(element);
     });
   </script>
+
 </body>
 </html>
 

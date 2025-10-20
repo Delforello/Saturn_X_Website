@@ -65,40 +65,40 @@
     </div>
 
     <script>
-        const passwordGate = document.getElementById('password-gate');
-        const downloadContent = document.getElementById('download-content');
-        const passwordInput = document.getElementById('password-input');
-        const submitBtn = document.getElementById('submit-btn');
-        const errorMsg = document.getElementById('error-msg');
+  const passwordGate = document.getElementById('password-gate');
+  const downloadContent = document.getElementById('download-content');
+  const passwordInput = document.getElementById('password-input');
+  const submitBtn = document.getElementById('submit-btn');
+  const errorMsg = document.getElementById('error-msg');
 
-        const correctCode = sessionStorage.getItem('downloadVerificationCode');
+  function unlockDownload() {
+    const savedCode = localStorage.getItem('downloadVerificationCode');
 
-        function unlockDownload() {
-            if (!correctCode) {
-                 errorMsg.textContent = 'Code not found. Return to the main page.';
-                 return;
-            }
+    if (!savedCode) {
+      errorMsg.textContent = 'Codice non trovato. Torna alla pagina principale e genera un codice.';
+      return;
+    }
 
-            const enteredPassword = passwordInput.value.toUpperCase();
-            if (enteredPassword === correctCode) {
-                passwordGate.classList.add('hidden');
-                downloadContent.classList.remove('hidden');
-            } else {
-                errorMsg.textContent = 'Incorrect code. Please try again.';
-                passwordInput.classList.add('border-red-500');
-                setTimeout(() => { 
-                    errorMsg.textContent = '';
-                    passwordInput.classList.remove('border-red-500');
-                }, 3000);
-            }
-        }
+    const enteredPassword = (passwordInput.value || '').toUpperCase().trim();
 
-        submitBtn.addEventListener('click', unlockDownload);
-        passwordInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                unlockDownload();
-            }
-        });
-    </script>
+    if (enteredPassword === savedCode) {
+      passwordGate.classList.add('hidden');
+      downloadContent.classList.remove('hidden');
+    } else {
+      errorMsg.textContent = 'Codice errato. Riprova.';
+      passwordInput.classList.add('border-red-500');
+      setTimeout(() => {
+        errorMsg.textContent = '';
+        passwordInput.classList.remove('border-red-500');
+      }, 3000);
+    }
+  }
+
+  submitBtn.addEventListener('click', unlockDownload);
+  passwordInput.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') unlockDownload();
+  });
+</script>
+
 </body>
 </html>
