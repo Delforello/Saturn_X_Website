@@ -1,104 +1,125 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saturn X Verification</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0e0e0e; }
-        .glass-card {
-            background: rgba(10, 10, 10, 0.55);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .btn-shine {
-            position: relative; overflow: hidden; transition: all 0.3s ease;
-        }
-        .btn-shine::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 75%; height: 100%;
-            background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: skewX(-25deg); transition: left 0.7s ease-in-out;
-        }
-        .btn-shine:hover::before { left: 150%; }
-        .btn-shine:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(120, 80, 228, 0.2); }
-        .fade-in { animation: fadeInAnimation 1s ease-in forwards; opacity: 0; }
-        @keyframes fadeInAnimation {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saturn X Verification</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0e0e0e; }
+    .glass-card {
+      background: rgba(10, 10, 10, 0.55);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-shine {
+      position: relative; overflow: hidden; transition: all 0.3s ease;
+    }
+    .btn-shine::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 75%; height: 100%;
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0) 100%);
+      transform: skewX(-25deg); transition: left 0.7s ease-in-out;
+    }
+    .btn-shine:hover::before { left: 150%; }
+    .btn-shine:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(120, 80, 228, 0.2); }
+    .fade-in { animation: fadeInAnimation 1s ease-in forwards; opacity: 0; }
+    @keyframes fadeInAnimation {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .icon-glow {
+      color: #a78bfa;
+      filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.6));
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+  </style>
 </head>
 <body class="text-white">
-    <div id="password-gate" class="min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-md text-center glass-card rounded-2xl p-8 shadow-2xl">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" class="mx-auto text-purple-400 mb-4"><path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12c5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-            <h1 class="text-2xl font-bold mb-2">Request Verification</h1>
-            <p class="text-gray-400 mb-6">Enter the code you saw on the main page to unlock the download.</p>
-            <input type="text" id="password-input" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg p-3 text-center text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 tracking-[3px] uppercase" placeholder="CODE">
-            <button id="submit-btn" class="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition-colors">
-                Verifica e Scarica
-            </button>
-            <p id="error-msg" class="text-red-500 text-sm mt-3 h-4"></p>
-        </div>
+
+  <!-- PASSWORD GATE -->
+  <div id="password-gate" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md text-center glass-card rounded-2xl p-8 shadow-2xl">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" class="mx-auto text-purple-400 mb-4"><path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12c5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+      <h1 class="text-2xl font-bold mb-2">Verification Required</h1>
+      <p class="text-gray-400 mb-6">Enter the code you received on the main page to unlock the download.</p>
+
+      <input type="text" id="password-input" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg p-3 text-center text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 tracking-[3px] uppercase" placeholder="CODE">
+
+      <button id="submit-btn" class="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition-colors">
+        Verify and Download
+      </button>
+
+      <p id="error-msg" class="text-red-500 text-sm mt-3 h-4"></p>
     </div>
-    <div id="download-content" class="min-h-screen flex items-center justify-center p-4 hidden">
-        <div class="w-full max-w-lg text-center">
-            <div class="glass-card rounded-2xl p-8 md-p-12 shadow-2xl fade-in">
-                 <div class="mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 256 256" class="mx-auto text-purple-400"><path fill="currentColor" d="M225.88 102.54L150.3 34.22a19.94 19.94 0 0 0-28.28 0l-75.58 68.32a20 20 0 0 0 14.14 34.14H88v65.34a20 20 0 0 0 20 20h40a20 20 0 0 0 20-20v-65.34h27.42a20 20 0 0 0 14.14-34.14ZM168 208a4 4 0 0 1-4 4h-72a4 4 0 0 1-4-4v-72h80Zm2.58-92h-85.16a4 4 0 0 1-2.82-6.82l75.58-68.32a4 4 0 0 1 5.66 0l75.58 68.32a4 4 0 0 1-2.82 6.82Z"></path></svg>
-                </div>
-                <p class="text-lg md:text-xl text-gray-300 mb-2">Thank you for downloading Saturn X!</p>
-                <h1 class="text-3xl md:text-5xl font-black tracking-tighter">Good exploiting.</h1>
-                <div class="mt-10">
-                    <a href="./Saturn X.zip" download class="btn-shine inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold text-lg py-4 px-10 rounded-full shadow-lg shadow-purple-500/20">
-                        Download Now
-                    </a>
-                </div>
-            </div>
-             <p class="text-xs text-gray-600 mt-8 fade-in">Your download will start automatically.</p>
+  </div>
+
+  <!-- DOWNLOAD CONTENT -->
+  <div id="download-content" class="min-h-screen flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-lg text-center">
+      <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl fade-in">
+        <div class="mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 256 256" class="mx-auto text-purple-400"><path fill="currentColor" d="M225.88 102.54L150.3 34.22a19.94 19.94 0 0 0-28.28 0l-75.58 68.32a20 20 0 0 0 14.14 34.14H88v65.34a20 20 0 0 0 20 20h40a20 20 0 0 0 20-20v-65.34h27.42a20 20 0 0 0 14.14-34.14ZM168 208a4 4 0 0 1-4 4h-72a4 4 0 0 1-4-4v-72h80Zm2.58-92h-85.16a4 4 0 0 1-2.82-6.82l75.58-68.32a4 4 0 0 1 5.66 0l75.58 68.32a4 4 0 0 1-2.82 6.82Z"></path></svg>
         </div>
+
+        <p class="text-lg md:text-xl text-gray-300 mb-2">Thank you for downloading Saturn X!</p>
+        <h1 class="text-3xl md:text-5xl font-black tracking-tighter flex items-center justify-center gap-2">
+          Good exploiting
+          <img src="./Icon.ico" alt="icon" class="w-8 h-8 object-contain icon-glow" width="36" height="36" viewBox="0 0 24 24" class="icon-glow"><path fill="currentColor" d="M12 2L13.09 8.26L19 8.27L14 12.14L15.18 18.02L12 14.77L8.82 18.02L10 12.14L5 8.27L10.91 8.26L12 2Z"/></svg>
+        </h1>
+
+        <div class="mt-10">
+          <a href="./Saturn X.zip" download class="btn-shine inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold text-lg py-4 px-10 rounded-full shadow-lg shadow-purple-500/20">
+            Download Now
+          </a>
+        </div>
+      </div>
+      <p class="text-xs text-gray-600 mt-8 fade-in">Your download will start automatically.</p>
     </div>
+  </div>
 
-    <script>
-  const passwordGate = document.getElementById('password-gate');
-  const downloadContent = document.getElementById('download-content');
-  const passwordInput = document.getElementById('password-input');
-  const submitBtn = document.getElementById('submit-btn');
-  const errorMsg = document.getElementById('error-msg');
+  <script>
+    const passwordGate = document.getElementById('password-gate');
+    const downloadContent = document.getElementById('download-content');
+    const passwordInput = document.getElementById('password-input');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorMsg = document.getElementById('error-msg');
 
-  function unlockDownload() {
-    const savedCode = localStorage.getItem('downloadVerificationCode');
+    function unlockDownload() {
+      const savedCode = localStorage.getItem('downloadVerificationCode');
 
-    if (!savedCode) {
-      errorMsg.textContent = 'Codice non trovato. Torna alla pagina principale e genera un codice.';
-      return;
+      if (!savedCode) {
+        errorMsg.textContent = 'Code not found. Please return to the main page and generate a new one.';
+        return;
+      }
+
+      const enteredPassword = (passwordInput.value || '').toUpperCase().trim();
+
+      if (enteredPassword === savedCode) {
+        passwordGate.classList.add('hidden');
+        downloadContent.classList.remove('hidden');
+        localStorage.removeItem('downloadVerificationCode');
+      } else {
+        errorMsg.textContent = 'Incorrect code. Please try again.';
+        passwordInput.classList.add('border-red-500');
+        setTimeout(() => {
+          errorMsg.textContent = '';
+          passwordInput.classList.remove('border-red-500');
+        }, 3000);
+      }
     }
 
-    const enteredPassword = (passwordInput.value || '').toUpperCase().trim();
-
-    if (enteredPassword === savedCode) {
-      passwordGate.classList.add('hidden');
-      downloadContent.classList.remove('hidden');
-    } else {
-      errorMsg.textContent = 'Codice errato. Riprova.';
-      passwordInput.classList.add('border-red-500');
-      setTimeout(() => {
-        errorMsg.textContent = '';
-        passwordInput.classList.remove('border-red-500');
-      }, 3000);
-    }
-  }
-
-  submitBtn.addEventListener('click', unlockDownload);
-  passwordInput.addEventListener('keyup', (event) => {
-    if (event.key === 'Enter') unlockDownload();
-  });
-</script>
-
+    submitBtn.addEventListener('click', unlockDownload);
+    passwordInput.addEventListener('keyup', (event) => {
+      if (event.key === 'Enter') unlockDownload();
+    });
+  </script>
 </body>
 </html>
