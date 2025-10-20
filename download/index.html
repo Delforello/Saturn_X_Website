@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+  if (!localStorage.getItem('passedLinkvertise')) {
+    alert("Access denied. Please complete the verification first.");
+    window.location.href = "/";
+  } else {
+    localStorage.removeItem('passedLinkvertise');
+  }
+</script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,8 +68,6 @@
       <p id="error-msg" class="text-red-500 text-sm mt-3 h-4"></p>
     </div>
   </div>
-
-  <!-- DOWNLOAD CONTENT -->
   <div id="download-content" class="min-h-screen flex items-center justify-center p-4 hidden">
     <div class="w-full max-w-lg text-center">
       <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl fade-in">
