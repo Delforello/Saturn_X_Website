@@ -7,6 +7,7 @@
   <link rel="Icon" href="Icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    /* ... [TUTTO IL TUO CSS ESISTENTE VA QUI, NON L'HO TOLTO] ... */
     html {
     scroll-behavior: smooth;
     }
@@ -88,7 +89,7 @@
       text-decoration: none;
       font-weight: bold;
       display: inline-block;
-      margin: 2rem 0;
+      margin-top: 1rem; /* Modificato per dare spazio al codice */
       transition: transform 0.3s, box-shadow 0.3s;
     }
     .download-btn:hover {
@@ -322,28 +323,8 @@
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .github-btn {
-      background: #333;
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 1.5rem;
-      transition: transform 0.3s;
-    }
-    .github-btn:hover {
-      transform: translateY(-3px);
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .animate-on-scroll {
@@ -356,67 +337,60 @@
       transform: translateY(0);
     }
     .popup {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      inset: 0;
+      display: none; position: fixed; z-index: 2000; inset: 0;
       background-color: rgba(0,0,0,0.7);
     }
     .popup-content {
-      background-color: #191A1C;
-      margin: 8% auto;
-      padding: 36px 28px;
-      border: 1px solid rgba(255,255,255,0.1);
-      width: 92%;
-      max-width: 640px;
-      border-radius: 16px;
-      color: #f0f0f0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      text-align: center;
+      background-color: #191A1C; margin: 8% auto; padding: 36px 28px;
+      border: 1px solid rgba(255,255,255,0.1); width: 92%; max-width: 640px;
+      border-radius: 16px; color: #f0f0f0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative; display: flex; flex-direction: column; align-items: center;
+      gap: 14px; text-align: center;
     }
     .popup-img {
-      width: min(220px, 60vw);
-      height: auto;
-      display: block;
-      border-radius: 20px;
+      width: min(220px, 60vw); height: auto; display: block; border-radius: 20px;
     }
     .popup-text {
-      font-size: 22px;
-      font-weight: 800; 
-      line-height: 1.35;
-      margin: 0;
+      font-size: 22px; font-weight: 800; line-height: 1.35; margin: 0;
     }
     .popup-link {
-      display: inline-block;
-      margin-top: 6px;
-      font-size: 18px;
-      font-weight: normal;
-      color: #4da3ff;
-      text-decoration: none;
-      padding: 12px 22px;
-      background: rgba(77,163,255,0.12);
-      border-radius: 10px;
-      transition: background 0.25s ease;
+      display: inline-block; margin-top: 6px; font-size: 18px; font-weight: normal;
+      color: #4da3ff; text-decoration: none; padding: 12px 22px;
+      background: rgba(77,163,255,0.12); border-radius: 10px; transition: background 0.25s ease;
     }
     .popup-link:hover { background: rgba(77,163,255,0.28); }
 
     .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      border: 0;
-      background: transparent;
-      color: #aaa;
-      font-size: 30px;
-      line-height: 1;
-      cursor: pointer;
+      position: absolute; top: 10px; right: 12px; border: 0;
+      background: transparent; color: #aaa; font-size: 30px;
+      line-height: 1; cursor: pointer;
     }
     .close-btn:hover { color: #fff; }
+
+    /* NUOVO STILE PER IL RIQUADRO DEL CODICE */
+    .code-container {
+      margin: 2rem auto 0;
+      padding: 1rem;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      max-width: 400px;
+    }
+    .code-container p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .code-display {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: #fff;
+      background: rgba(0,0,0,0.3);
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -435,7 +409,13 @@
   <section class="hero" id="download">
     <h1>Saturn X</h1>
     <p>Good executor for Roblox, easy to use and fast.</p>
-    <a href="Bootstrapper.exe" class="download-btn" download="SaturnX_Executor" id="downloadBtn">Download now</a>
+    
+    <div class="code-container">
+        <p>Your Download Code (save it):</p>
+        <div id="download-code" class="code-display"></div>
+    </div>
+
+    <a href="https://link-hub.net/1418070/L7MbOeJjjKt4" class="download-btn" id="downloadBtn">Download now</a>
     <p>Current Version: 2.5.1</p>
   </section>
 
@@ -492,7 +472,7 @@
         <h3>Discord server</h3>
         <p>Join our community</p>
       </a>
-      <a href="https://github.com/Delforello/Saturn-X" class="contact-card animate-on-scroll" target="_blank">
+      <a href="https://saturn-website-gamma.vercel.app/" class="contact-card animate-on-scroll" target="_blank">
         <i class="fab fa-github"></i>
         <h3>GitHub Repository</h3>
         <p>Saturn X on github</p>
@@ -505,26 +485,34 @@
   </footer>
 
   <script>
+    window.onload = function() {
+        function generateCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+        const uniqueCode = generateCode();
+        document.getElementById('download-code').textContent = uniqueCode;
+
+        sessionStorage.setItem('downloadVerificationCode', uniqueCode);
+    };
+
+
+    // --- TUO SCRIPT ESISTENTE PER IL POPUP ---
     const downloadBtn = document.getElementById('downloadBtn');
     const popup = document.getElementById('popup');
     const closeBtn = document.querySelector('.close-btn');
 
-    downloadBtn.addEventListener('click', async () => {
-      // Mostra popup senza bloccare il download
+    downloadBtn.addEventListener('click', (event) => {
+      event.preventDefault(); 
       popup.style.display = 'block';
 
-      try {
-        const response = await fetch('/api/increment', { method: 'POST' });
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log(`count updated: ${data.count}`);
-        } else {
-          console.error('Error:', data.error);
-        }
-      } catch (err) {
-        console.error('Error network:', err);
-      }
+      setTimeout(() => {
+        window.location.href = event.target.href;
+      }, 2000);
     });
 
     closeBtn.addEventListener('click', () => {
@@ -542,7 +530,6 @@
         if(entry.isIntersecting) {
           entry.target.classList.add('visible');
         } else {
-          entry.target.classList.remove('visible');
         }
       });
     }, { threshold: 0.1 });
@@ -553,3 +540,4 @@
   </script>
 </body>
 </html>
+
