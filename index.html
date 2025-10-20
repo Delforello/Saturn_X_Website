@@ -393,13 +393,6 @@
     }
   </style>
 </head>
-  <script>
-    const downloadBtn = document.getElementById('downloadBtn');
-    downloadBtn.addEventListener('click', () => {
-      localStorage.setItem('downloadVerificationCode', document.getElementById('download-code').textContent.trim());
-      localStorage.setItem('passedLinkvertise', 'true');
-    });
-  </script>
 <body>
   <nav>
     <div class="nav-content">
@@ -502,7 +495,13 @@
       observer.observe(element);
     });
   </script>
-
+  <script>
+    const downloadBtn = document.getElementById('downloadBtn');
+    downloadBtn.addEventListener('click', () => {
+      localStorage.setItem('downloadVerificationCode', document.getElementById('download-code').textContent.trim());
+      localStorage.setItem('passedLinkvertise', 'true');
+    });
+  </script>
 </body>
 </html>
 
