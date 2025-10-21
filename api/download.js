@@ -32,22 +32,39 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LINKVERTISE_BEARER}`,
-        'Accept': 'text/plain',
+        'Accept': 'application/json',  // Cambiato per favorire JSON
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      },
-      timeout: 5000 // Timeout di 5 secondi per evitare attese lunghe
+      }
     });
 
     const antiText = await antiResp.text();
-    console.log('📥 Risposta API:', antiText);
+    console.log('📥 Risposta API grezza:', antiText);
 
-    if (!antiResp.ok || antiText.trim() !== 'TRUE') {
+    if (!antiResp.ok) {
       console.warn('⚠️ Verifica anti-bypassing fallita:', antiResp.status, antiText);
       return res.redirect(302, FALLBACK_REDIRECT);
     }
 
+    let isValid = false;
+    try {
+      // Prova a parsare come JSON e verifica status
+      const antiJson = JSON.parse(antiText);
+      isValid = antiJson.status === true;
+      console.log('📥 Risposta API parsata:', antiJson);
+    } catch (parseErr) {
+      // Fallback a controllo stringa
+      isValid = antiText.trim() === 'TRUE';
+      console.log('📥 Risposta API come stringa:', antiText.trim());
+    }
+
+    if (!isValid) {
+      console.warn('❌ Verifica anti-bypassing fallita:', antiText);
+      return res.redirect(302, FALLBACK_REDIRECT);
+    }
+
+    console.log('✅ Verifica anti-bypassing riuscita!');
+
     // Opzionale: Verifica codice utente (se implementi pagina intermedia)
-    // const storedCode = sessionStorage.getItem('downloadVerificationCase'); // Non funziona server-side
     // if (userCode && userCode !== storedCode) {
     //   console.warn('❌ Codice utente non valido:', userCode);
     //   return res.redirect(302, FALLBACK_REDIRECT);
