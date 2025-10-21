@@ -465,18 +465,19 @@
     <p>© 2025 Saturn X All rights reserved.</p>
   </footer>
   <script>
-    function generateCode() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let code = '';
-      for (let i=0;i<6;i++) code += chars.charAt(Math.floor(Math.random()*chars.length));
-      return code;
-    }
-
-    window.addEventListener('load', () => {
+        window.onload = function() {
+      function generateCode() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+      }
       const code = generateCode();
       document.getElementById('download-code').textContent = code;
-      // save it so user can verify later (sessionStorage so it's per-tab)
       sessionStorage.setItem('downloadVerificationCode', code);
+    };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if(entry.isIntersecting) {
