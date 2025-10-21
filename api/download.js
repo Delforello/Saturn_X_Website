@@ -8,7 +8,8 @@ const FALLBACK_REDIRECT = process.env.FALLBACK_REDIRECT || 'https://link-hub.net
 export default async function handler(req, res) {
   try {
     const lvToken = req.query.token || req.query.linkvertiseToken || req.query.lvt;
-    const userCode = (req.query.code || '').toUpperCase();
+    const hash = req.query.hash; // New: Extract hash for anti-bypassing
+    const userCode = (req.query.code || '').toUpperCase(); // Unused now, but ready for integration
 
     if (!LINKVERTISE_BEARER) {
       console.error("❌ Missing LINKVERTISE_BEARER env var");
@@ -19,6 +20,7 @@ export default async function handler(req, res) {
       return res.redirect(FALLBACK_REDIRECT);
     }
 
+    // Step 1: Verify Linkvertise token
     const verifyUrl = `https://publisher.linkvertise.com/api/v1/verify?token=${encodeURIComponent(lvToken)}`;
     const lvResp = await fetch(verifyUrl, {
       headers: {
@@ -40,7 +42,35 @@ export default async function handler(req, res) {
       return res.redirect(FALLBACK_REDIRECT);
     }
 
-    const filePath = path.join(process.cwd(), 'public', 'Saturn_X.zip');
+    // Step 2: Verify anti-bypassing hash (if present and enabled)
+    if (hash) {
+      const antiBypassUrl = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${encodeURIComponent(LINKVERTISE_BEARER)}&hash=${encodeURIComponent(hash)}`;
+      const antiResp = await fetch(antiBypassUrl, { method: 'POST' });
+
+      if (!antiResp.ok) {
+        console.warn('⚠️ Anti-bypassing verify failed:', antiResp.status);
+        return res.redirect(FALLBACK_REDIRECT);
+      }
+
+      const antiText = await antiResp.text();
+      if (antiText.trim() !== 'TRUE') {
+        console.warn('❌ Invalid hash:', antiText);
+        return res.redirect(FALLBACK_REDIRECT);
+      }
+    } else {
+      // Optional: If anti-bypassing is required, fail if no hash
+      console.warn('⚠️ No hash provided for anti-bypassing');
+      return res.redirect(FALLBACK_REDIRECT);
+    }
+
+    // Optional: Verify user code (if implementing second page)
+    // const storedCode = sessionStorage.getItem('downloadVerificationCode'); // Note: SessionStorage is client-side; use cookies or query param
+    // if (userCode !== storedCode) {
+    //   return res.redirect(FALLBACK_REDIRECT);
+    // }
+
+    // Serve the file
+    const filePath = path.join(process.cwd(), 'public/download', 'Saturn_X.zip');
 
     if (!fs.existsSync(filePath)) {
       console.error("❌ File non trovato:", filePath);
