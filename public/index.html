@@ -7,9 +7,8 @@
   <link rel="Icon" href="Icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    /* ... [TUTTO IL TUO CSS ESISTENTE VA QUI, NON L'HO TOLTO] ... */
     html {
-    scroll-behavior: smooth;
+      scroll-behavior: smooth;
     }
     * {
       margin: 0;
@@ -48,8 +47,6 @@
       margin: 0;
       padding: 0 10px;
     }
-
-
     .logo {
       color: var(--text-light);
       font-size: 1.5rem;
@@ -124,7 +121,6 @@
       transform: translateY(-8px);
       box-shadow: 0 15px 35px rgba(125, 42, 232, 0.3);
     }
-    
     .api-section {
       padding: 5rem 5%;
       background: var(--card-bg);
@@ -138,7 +134,6 @@
       max-width: 1200px;
       border: 1px solid rgba(255,255,255,0.05);
     }
-
     .api-section h2 {
       font-size: 3.5rem;
       margin-bottom: 1rem;
@@ -146,14 +141,12 @@
       font-weight: 700;
       position: relative;
     }
-
     .api-description {
       font-size: 1.2rem;
       margin-bottom: 2rem;
       color: var(--text-muted);
       line-height: 1.6;
     }
-
     .github-btn {
       background: #333;
       color: white;
@@ -166,22 +159,18 @@
       font-size: 1.1rem;
       position: relative;
     }
-
     .github-btn i {
       margin-right: 10px;
       font-size: 1.3rem;
     }
-
     .github-btn:hover {
       transform: translateY(-5px);
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     }
-
     .github-btn:active {
       transform: translateY(0);
       box-shadow: none;
     }
-
     .preview-section {
       padding: 5rem 5%;
       background: var(--darker-bg);
@@ -189,7 +178,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .preview-container {
       max-width: 800px;
       margin: 0 auto;
@@ -200,7 +188,6 @@
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
       border: 1px solid rgba(255,255,255,0.05);
     }
-
     .preview-image {
       width: 100%;
       border-radius: 10px;
@@ -208,17 +195,14 @@
       transition: transform 0.5s ease;
       animation: float 6s ease-in-out infinite;
     }
-
     .preview-image:hover {
       transform: scale(1.02);
     }
-
     @keyframes float {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-15px); }
       100% { transform: translateY(0px); }
     }
-
     .preview-title {
       font-size: 2.5rem;
       margin-bottom: 1.5rem;
@@ -226,14 +210,12 @@
       position: relative;
       display: inline-block;
     }
-
     .preview-description {
       font-size: 1.1rem;
       color: var(--text-muted);
       margin-bottom: 2rem;
       line-height: 1.6;
     }
-
     .contacts {
       padding: 8rem 5%;
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -242,7 +224,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .contacts .section-title {
       font-size: 2.5rem;
       margin-bottom: 2rem;
@@ -252,7 +233,6 @@
       display: inline-block;
       padding-bottom: 0.3rem;
     }
-
     .contact-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -261,7 +241,6 @@
       margin: 3rem auto 0;
       padding: 0 2rem;
     }
-
     .contact-card {
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
@@ -313,7 +292,6 @@
     .contact-card:hover i {
       transform: scale(1.2);
     }
-
     footer {
       background: var(--darker-bg);
       color: var(--text-light);
@@ -321,12 +299,10 @@
       padding: 2rem 5%;
       border-top: 1px solid rgba(255,255,255,0.05);
     }
-
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     .animate-on-scroll {
       opacity: 0;
       transform: translateY(20px);
@@ -359,38 +335,12 @@
       background: rgba(77,163,255,0.12); border-radius: 10px; transition: background 0.25s ease;
     }
     .popup-link:hover { background: rgba(77,163,255,0.28); }
-
     .close-btn {
       position: absolute; top: 10px; right: 12px; border: 0;
       background: transparent; color: #aaa; font-size: 30px;
       line-height: 1; cursor: pointer;
     }
     .close-btn:hover { color: #fff; }
-
-    /* NUOVO STILE PER IL RIQUADRO DEL CODICE */
-    .code-container {
-      margin: 2rem auto 0;
-      padding: 1rem;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      max-width: 400px;
-    }
-    .code-container p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-    .code-display {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1.5rem;
-      font-weight: bold;
-      letter-spacing: 3px;
-      color: #fff;
-      background: rgba(0,0,0,0.3);
-      padding: 0.5rem;
-      border-radius: 5px;
-    }
   </style>
 </head>
 <body>
@@ -409,12 +359,6 @@
   <section class="hero" id="download">
     <h1>Saturn X</h1>
     <p>Good executor for Roblox, easy to use and fast.</p>
-    
-    <div class="code-container">
-        <p>Your Download Code (save it):</p>
-        <div id="download-code" class="code-display"></div>
-    </div>
-
     <a href="https://link-hub.net/1418070/GgH9bAH83ACg" class="download-btn" id="downloadBtn">Download now</a>
     <p>Current Version: 2.5.1</p>
   </section>
@@ -464,23 +408,11 @@
   <footer>
     <p>© 2025 Saturn X All rights reserved.</p>
   </footer>
+
   <script>
-        window.onload = function() {
-      function generateCode() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let code = '';
-        for (let i = 0; i < 6; i++) {
-          code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return code;
-      }
-      const code = generateCode();
-      document.getElementById('download-code').textContent = code;
-      sessionStorage.setItem('downloadVerificationCode', code);
-    };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if(entry.isIntersecting) {
+        if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
@@ -490,7 +422,5 @@
       observer.observe(element);
     });
   </script>
-  
 </body>
 </html>
-
