@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saturn X - Roblox Executor</title>
+  <link rel="Icon" href="Icon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* ... [TUTTO IL TUO CSS ESISTENTE VA QUI, NON L'HO TOLTO] ... */
+    html {
+    scroll-behavior: smooth;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    :root {
+      --primary-color: #1b1c1f;
+      --secondary-color: #0E0F11;
+      --dark-bg: #0E0F11;
+      --darker-bg: #0E0F11;
+      --card-bg: #191A1C;
+      --text-light: #f0f0f0;
+      --text-muted: #b0b0b0;
+    }
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text-light);
+    }
+    nav {
+      background: var(--darker-bg);
+      padding: 1rem 2%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+      margin: 0;
+      padding: 0 10px;
+    }
+
+
+    .logo {
+      color: var(--text-light);
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: var(--text-light) !important;
+      opacity: 1;
+    }
+    .hero {
+      padding: 120px 5% 80px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 1s;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .download-btn {
+      background: white;
+      color: var(--primary-color);
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .download-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .features {
+      padding: 5rem 5%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      transition: transform 0.00001s ease, box-shadow 0.00001s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .feature-card h3 {
+      color: var(--text-light);
+      margin-bottom: 0.7rem;
+    }
+    .feature-card p {
+      color: var(--text-muted);
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(125, 42, 232, 0.3);
+    }
+    
+    .api-section {
+      padding: 5rem 5%;
+      background: var(--card-bg);
+      color: var(--text-light);
+      text-align: center;
+      border-radius: 15px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      margin: 2rem auto;
+      max-width: 1200px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .api-section h2 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-light);
+      font-weight: 700;
+      position: relative;
+    }
+
+    .api-description {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .github-btn {
+      background: #333;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 1.5rem;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+      font-size: 1.1rem;
+      position: relative;
+    }
+
+    .github-btn i {
+      margin-right: 10px;
+      font-size: 1.3rem;
+    }
+
+    .github-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .github-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .preview-section {
+      padding: 5rem 5%;
+      background: var(--darker-bg);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preview-container {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: 15px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .preview-image {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.5s ease;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .preview-image:hover {
+      transform: scale(1.02);
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .preview-title {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-light);
+      position: relative;
+      display: inline-block;
+    }
+
+    .preview-description {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .contacts {
+      padding: 8rem 5%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contacts .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+
+    .contact-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      max-width: 1200px;
+      margin: 3rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .contact-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: white;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: 0.5s;
+    }
+    .contact-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+    .contact-card:hover::before {
+      left: 100%;
+    }
+    .contact-card i {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s;
+    }
+    .contact-card h3 {
+      font-size: 1.6rem;
+      margin: 1rem 0;
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    .contact-card p {
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+      margin-top: 0.5rem;
+    }
+    .contact-card:hover i {
+      transform: scale(1.2);
+    }
+
+    footer {
+      background: var(--darker-bg);
+      color: var(--text-light);
+      text-align: center;
+      padding: 2rem 5%;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: 1s;
+    }
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .popup {
+      display: none; position: fixed; z-index: 2000; inset: 0;
+      background-color: rgba(0,0,0,0.7);
+    }
+    .popup-content {
+      background-color: #191A1C; margin: 8% auto; padding: 36px 28px;
+      border: 1px solid rgba(255,255,255,0.1); width: 92%; max-width: 640px;
+      border-radius: 16px; color: #f0f0f0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative; display: flex; flex-direction: column; align-items: center;
+      gap: 14px; text-align: center;
+    }
+    .popup-img {
+      width: min(220px, 60vw); height: auto; display: block; border-radius: 20px;
+    }
+    .popup-text {
+      font-size: 22px; font-weight: 800; line-height: 1.35; margin: 0;
+    }
+    .popup-link {
+      display: inline-block; margin-top: 6px; font-size: 18px; font-weight: normal;
+      color: #4da3ff; text-decoration: none; padding: 12px 22px;
+      background: rgba(77,163,255,0.12); border-radius: 10px; transition: background 0.25s ease;
+    }
+    .popup-link:hover { background: rgba(77,163,255,0.28); }
+
+    .close-btn {
+      position: absolute; top: 10px; right: 12px; border: 0;
+      background: transparent; color: #aaa; font-size: 30px;
+      line-height: 1; cursor: pointer;
+    }
+    .close-btn:hover { color: #fff; }
+
+    /* NUOVO STILE PER IL RIQUADRO DEL CODICE */
+    .code-container {
+      margin: 2rem auto 0;
+      padding: 1rem;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      max-width: 400px;
+    }
+    .code-container p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .code-display {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: #fff;
+      background: rgba(0,0,0,0.3);
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-content">
+      <a href="#" class="logo">Saturn X</a>
+      <div class="nav-links">
+        <a href="#download">Download</a>
+        <a href="#preview">Preview</a>
+        <a href="#api">Saturn Api</a>
+        <a href="#contacts">Contacts</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" id="download">
+    <h1>Saturn X</h1>
+    <p>Good executor for Roblox, easy to use and fast.</p>
+    
+    <div class="code-container">
+        <p>Your Download Code (save it):</p>
+        <div id="download-code" class="code-display"></div>
+    </div>
+
+    <a href="https://link-hub.net/1418070/GgH9bAH83ACg" class="download-btn" id="downloadBtn">Download now</a>
+    <p>Current Version: 2.5.1</p>
+  </section>
+
+  <section class="features">
+    <div class="feature-card animate-on-scroll">
+      <h3>Free</h3>
+      <p>It's completely free, without spending any money.</p>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <h3>100% Safe</h3>
+      <p>Does not contain malware</p>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <h3>High UNC</h3>
+      <p>84% UNC</p>
+    </div>
+  </section>
+
+  <section id="preview" class="preview-section animate-on-scroll">
+    <div class="preview-container">
+      <h2 class="preview-title">Switch to Saturn X</h2>
+      <p class="preview-description">Explore the power of Saturn X</p>
+      <img src="Gui.png" alt="Saturn X Executor Preview" class="preview-image">
+    </div>
+  </section>
+
+  <section id="api" class="api-section animate-on-scroll">
+    <h2 class="section-title">Saturn API</h2>
+    <p class="api-description">Saturn Api is free and open source based on Xeno!</p>
+    <a href="https://github.com/Delforello/Saturn_Api" class="github-btn" target="_blank">
+      <i class="fab fa-github"></i> View on GitHub
+    </a>
+  </section>
+
+  <section id="contacts" class="contacts">
+    <h2 class="section-title">Contacts</h2>
+    <div class="contact-cards">
+      <a href="https://discord.gg/RrNWfpjtHA" class="contact-card animate-on-scroll" target="_blank">
+        <i class="fab fa-discord"></i>
+        <h3>Discord server</h3>
+        <p>Join our community</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Saturn X All rights reserved.</p>
+  </footer>
+  <script>
+        window.onload = function() {
+      function generateCode() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+      }
+      const uniqueCode = generateCode();
+      document.getElementById('download-code').textContent = uniqueCode;
+      sessionStorage.setItem('downloadVerificationCode', uniqueCode);
+    };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-on-scroll').forEach((element) => {
+      observer.observe(element);
+    });
+  </script>
+  
+</body>
+</html>
+
