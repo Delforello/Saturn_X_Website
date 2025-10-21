@@ -1,4 +1,3 @@
-// pages/api/download.js
 import fs from 'fs';
 import path from 'path';
 
@@ -7,74 +6,54 @@ const FALLBACK_REDIRECT = process.env.FALLBACK_REDIRECT || 'https://link-hub.net
 
 export default async function handler(req, res) {
   try {
-    const lvToken = req.query.token || req.query.linkvertiseToken || req.query.lvt;
-    const hash = req.query.hash; // New: Extract hash for anti-bypassing
-    const userCode = (req.query.code || '').toUpperCase(); // Unused now, but ready for integration
+    const hash = req.query.hash; // Estraggo il hash dal redirect di Linkvertise
+    const userCode = (req.query.code || '').toUpperCase(); // Pronto per futura integrazione
 
     if (!LINKVERTISE_BEARER) {
-      console.error("❌ Missing LINKVERTISE_BEARER env var");
-      return res.status(500).send("Server misconfiguration");
+      console.error("❌ Variabile d'ambiente LINKVERTISE_BEARER mancante");
+      return res.status(500).send("Errore di configurazione del server");
     }
 
-    if (!lvToken) {
-      return res.redirect(FALLBACK_REDIRECT);
+    if (!hash) {
+      console.warn('⚠️ Nessun hash fornito per l\'anti-bypassing');
+      return res.redirect(302, FALLBACK_REDIRECT);
     }
 
-    // Step 1: Verify Linkvertise token
-    const verifyUrl = `https://publisher.linkvertise.com/api/v1/verify?token=${encodeURIComponent(lvToken)}`;
-    const lvResp = await fetch(verifyUrl, {
+    // Verifica hash con l'endpoint anti-bypassing
+    const antiBypassUrl = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${encodeURIComponent(LINKVERTISE_BEARER)}&hash=${encodeURIComponent(hash)}`;
+    const antiResp = await fetch(antiBypassUrl, {
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${LINKVERTISE_BEARER}`,
-        'Accept': 'application/json'
+        'Accept': 'text/plain',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       }
     });
 
-    if (!lvResp.ok) {
-      console.warn('⚠️ Linkvertise verify returned non-OK:', lvResp.status);
-      return res.redirect(FALLBACK_REDIRECT);
+    if (!antiResp.ok) {
+      console.warn('⚠️ Verifica anti-bypassing fallita:', antiResp.status, await antiResp.text());
+      return res.redirect(302, FALLBACK_REDIRECT);
     }
 
-    const lvJson = await lvResp.json();
-    const isValid = lvJson?.success === true || lvJson?.data?.valid === true;
-
-    if (!isValid) {
-      console.warn('❌ Token non valido:', lvJson);
-      return res.redirect(FALLBACK_REDIRECT);
+    const antiText = await antiResp.text();
+    if (antiText.trim() !== 'TRUE') {
+      console.warn('❌ Hash non valido:', antiText);
+      return res.redirect(302, FALLBACK_REDIRECT);
     }
 
-    // Step 2: Verify anti-bypassing hash (if present and enabled)
-    if (hash) {
-      const antiBypassUrl = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${encodeURIComponent(LINKVERTISE_BEARER)}&hash=${encodeURIComponent(hash)}`;
-      const antiResp = await fetch(antiBypassUrl, { method: 'POST' });
-
-      if (!antiResp.ok) {
-        console.warn('⚠️ Anti-bypassing verify failed:', antiResp.status);
-        return res.redirect(FALLBACK_REDIRECT);
-      }
-
-      const antiText = await antiResp.text();
-      if (antiText.trim() !== 'TRUE') {
-        console.warn('❌ Invalid hash:', antiText);
-        return res.redirect(FALLBACK_REDIRECT);
-      }
-    } else {
-      // Optional: If anti-bypassing is required, fail if no hash
-      console.warn('⚠️ No hash provided for anti-bypassing');
-      return res.redirect(FALLBACK_REDIRECT);
-    }
-
-    // Optional: Verify user code (if implementing second page)
-    // const storedCode = sessionStorage.getItem('downloadVerificationCode'); // Note: SessionStorage is client-side; use cookies or query param
-    // if (userCode !== storedCode) {
-    //   return res.redirect(FALLBACK_REDIRECT);
+    // Opzionale: Verifica codice utente (se implementi pagina intermedia)
+    // const storedCode = sessionStorage.getItem('downloadVerificationCode'); // Non funziona server-side
+    // if (userCode && userCode !== storedCode) {
+    //   console.warn('❌ Codice utente non valido:', userCode);
+    //   return res.redirect(302, FALLBACK_REDIRECT);
     // }
 
-    // Serve the file
+    // Servi il file
     const filePath = path.join(process.cwd(), 'public/download', 'Saturn_X.zip');
 
     if (!fs.existsSync(filePath)) {
       console.error("❌ File non trovato:", filePath);
-      return res.status(404).send("File not found");
+      return res.status(404).send("File non trovato");
     }
 
     res.setHeader('Content-Type', 'application/zip');
@@ -82,7 +61,7 @@ export default async function handler(req, res) {
     const readStream = fs.createReadStream(filePath);
     readStream.pipe(res);
   } catch (err) {
-    console.error('💥 Error in /api/download:', err);
-    res.status(500).send('Server error');
+    console.error('💥 Errore in /api/download:', err.message, err.stack);
+    res.status(500).send('Errore del server');
   }
 }
