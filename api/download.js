@@ -7,7 +7,7 @@ const fetch = require('node-fetch'); // aggiungi a package.json su dev se vuoi
 // IMPORTANT: set this in Vercel environment variables (Dashboard -> Project -> Environment Variables)
 // LINKVERTISE_BEARER = <il tuo "Anti-Bypass" secret / API key che Linkvertise ti ha dato>
 // FALLBACK_REDIRECT = https://link-hub.net/1418070/GgH9bAH83ACg  (o la tua Linkvertise landing)
-const LINKVERTISE_BEARER = process.env._LINKVERTISE_BEARER;
+const LINKVERTISE_BEARER = process.env.LINKVERTISE_BEARER;
 const FALLBACK_REDIRECT = process.env.FALLBACK_REDIRECT || 'https://link-hub.net/1418070/GgH9bAH83ACg';
 
 module.exports = async (req, res) => {
