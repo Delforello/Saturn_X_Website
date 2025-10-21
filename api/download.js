@@ -6,43 +6,48 @@ const FALLBACK_REDIRECT = process.env.FALLBACK_REDIRECT || 'https://link-hub.net
 
 export default async function handler(req, res) {
   try {
-    const hash = req.query.hash; // Estraggo il hash dal redirect di Linkvertise
-    const userCode = (req.query.code || '').toUpperCase(); // Pronto per futura integrazione
+    // Logga i parametri ricevuti per debug
+    console.log('📥 Parametri ricevuti:', req.query);
 
+    const hash = req.query.hash; // Hash dal redirect di Linkvertise
+    const userCode = (req.query.code || '').toUpperCase(); // Per futura integrazione
+
+    // Verifica presenza del token bearer
     if (!LINKVERTISE_BEARER) {
-      console.error("❌ Variabile d'ambiente LINKVERTISE_BEARER mancante");
+      console.error("❌ Variabile LINKVERTISE_BEARER mancante");
       return res.status(500).send("Errore di configurazione del server");
     }
 
+    // Verifica presenza dell'hash
     if (!hash) {
       console.warn('⚠️ Nessun hash fornito per l\'anti-bypassing');
       return res.redirect(302, FALLBACK_REDIRECT);
     }
 
-    // Verifica hash con l'endpoint anti-bypassing
+    // Verifica hash tramite API anti-bypassing
     const antiBypassUrl = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${encodeURIComponent(LINKVERTISE_BEARER)}&hash=${encodeURIComponent(hash)}`;
+    console.log('📤 Invio richiesta a:', antiBypassUrl);
+
     const antiResp = await fetch(antiBypassUrl, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LINKVERTISE_BEARER}`,
         'Accept': 'text/plain',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      }
+      },
+      timeout: 5000 // Timeout di 5 secondi per evitare attese lunghe
     });
 
-    if (!antiResp.ok) {
-      console.warn('⚠️ Verifica anti-bypassing fallita:', antiResp.status, await antiResp.text());
-      return res.redirect(302, FALLBACK_REDIRECT);
-    }
-
     const antiText = await antiResp.text();
-    if (antiText.trim() !== 'TRUE') {
-      console.warn('❌ Hash non valido:', antiText);
+    console.log('📥 Risposta API:', antiText);
+
+    if (!antiResp.ok || antiText.trim() !== 'TRUE') {
+      console.warn('⚠️ Verifica anti-bypassing fallita:', antiResp.status, antiText);
       return res.redirect(302, FALLBACK_REDIRECT);
     }
 
     // Opzionale: Verifica codice utente (se implementi pagina intermedia)
-    // const storedCode = sessionStorage.getItem('downloadVerificationCode'); // Non funziona server-side
+    // const storedCode = sessionStorage.getItem('downloadVerificationCase'); // Non funziona server-side
     // if (userCode && userCode !== storedCode) {
     //   console.warn('❌ Codice utente non valido:', userCode);
     //   return res.redirect(302, FALLBACK_REDIRECT);
@@ -50,16 +55,18 @@ export default async function handler(req, res) {
 
     // Servi il file
     const filePath = path.join(process.cwd(), 'public/download', 'Saturn_X.zip');
+    console.log('📂 Tentativo di servire il file:', filePath);
 
     if (!fs.existsSync(filePath)) {
-      console.error("❌ File non trovato:", filePath);
-      return res.status(404).send("File non trovato");
+      console.error('❌ File non trovato:', filePath);
+      return res.status(404).send('File non trovato');
     }
 
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', 'attachment; filename="Saturn_X.zip"');
     const readStream = fs.createReadStream(filePath);
     readStream.pipe(res);
+    console.log('✅ File servito con successo');
   } catch (err) {
     console.error('💥 Errore in /api/download:', err.message, err.stack);
     res.status(500).send('Errore del server');
