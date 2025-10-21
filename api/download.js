@@ -5,7 +5,7 @@ const path = require('path');
 // IMPORTANTE: imposta questa variabile su Vercel
 // LINKVERTISE_BEARER = il tuo codice API di Linkvertise
 // FALLBACK_REDIRECT = il tuo link Linkvertise (opzionale)
-const LINKVERTISE_BEARER = process.env.LINKVERTISE_BEARER;
+const LINKVERTISE_BEARER = process.env.LINKVERTISE_SECRET;
 const FALLBACK_REDIRECT = process.env.FALLBACK_REDIRECT || 'https://link-hub.net/1418070/GgH9bAH83ACg';
 
 module.exports = async (req, res) => {
