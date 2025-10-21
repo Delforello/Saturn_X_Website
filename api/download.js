@@ -1,14 +1,11 @@
-// api/download.js
-const fs = require('fs');
-const path = require('path');
+// pages/api/download.js
+import fs from 'fs';
+import path from 'path';
 
-// IMPORTANTE: imposta questa variabile su Vercel
-// LINKVERTISE_BEARER = il tuo codice API di Linkvertise
-// FALLBACK_REDIRECT = il tuo link Linkvertise (opzionale)
 const LINKVERTISE_BEARER = process.env.LINKVERTISE_SECRET;
 const FALLBACK_REDIRECT = process.env.FALLBACK_REDIRECT || 'https://link-hub.net/1418070/GgH9bAH83ACg';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   try {
     const lvToken = req.query.token || req.query.linkvertiseToken || req.query.lvt;
     const userCode = (req.query.code || '').toUpperCase();
@@ -22,7 +19,6 @@ module.exports = async (req, res) => {
       return res.redirect(FALLBACK_REDIRECT);
     }
 
-    // ✅ Usa la fetch nativa di Node (non serve node-fetch)
     const verifyUrl = `https://publisher.linkvertise.com/api/v1/verify?token=${encodeURIComponent(lvToken)}`;
     const lvResp = await fetch(verifyUrl, {
       headers: {
@@ -37,15 +33,14 @@ module.exports = async (req, res) => {
     }
 
     const lvJson = await lvResp.json();
-    const isValid = (lvJson && (lvJson.success === true || (lvJson.data && lvJson.data.valid === true)));
+    const isValid = lvJson?.success === true || lvJson?.data?.valid === true;
 
     if (!isValid) {
       console.warn('❌ Token non valido:', lvJson);
       return res.redirect(FALLBACK_REDIRECT);
     }
 
-    // ✅ Percorso corretto per file su Vercel
-    const filePath = path.join(__dirname, '..', 'public', 'Saturn_X.zip');
+    const filePath = path.join(process.cwd(), 'public', 'Saturn_X.zip');
 
     if (!fs.existsSync(filePath)) {
       console.error("❌ File non trovato:", filePath);
@@ -60,4 +55,4 @@ module.exports = async (req, res) => {
     console.error('💥 Error in /api/download:', err);
     res.status(500).send('Server error');
   }
-};
+}
